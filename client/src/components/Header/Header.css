@@ -1,0 +1,33 @@
+.header {
+    background: linear-gradient(90deg, rgba(255, 85, 85, 1) 0%, rgba(255, 217, 102, 1) 100%);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.header nav {
+    display: flex;
+    gap: 15px;
+}
+
+.header nav a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.header nav a:hover {
+    color: rgba(255, 217, 102, 1);
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .header nav {
+        flex-direction: column;
+    }
+}
