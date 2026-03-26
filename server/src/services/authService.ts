@@ -18,11 +18,12 @@ export const register = async (data: RegisterData) => {
   if (existingUser) throw createError('User with this email or username already exists', 409);
 
   const verificationToken = crypto.randomBytes(32).toString('hex');
+  const hashedVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
   const user = await User.create({
     username,
     email,
     password,
-    emailVerificationToken: verificationToken,
+    emailVerificationToken: hashedVerificationToken,
   });
 
   await emailService.sendWelcomeEmail(email, username).catch((err) => logger.warn(`Failed to send welcome email to ${email}: ${err.message}`));
@@ -82,7 +83,8 @@ export const resetPassword = async (token: string, newPassword: string) => {
 };
 
 export const verifyEmail = async (token: string) => {
-  const user = await User.findOne({ emailVerificationToken: token });
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const user = await User.findOne({ emailVerificationToken: hashedToken });
   if (!user) throw createError('Invalid verification token', 400);
   user.isEmailVerified = true;
   user.emailVerificationToken = undefined;
