@@ -17,8 +17,6 @@ export interface NotificationContextValue {
 
 export const NotificationContext = createContext<NotificationContextValue | undefined>(undefined);
 
-let counter = 0;
-
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
@@ -28,7 +26,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const addNotification = useCallback(
     (type: NotificationType, message: string, duration = 5000) => {
-      const id = `notification-${++counter}`;
+  const id = `notification-${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`}`;
       setNotifications((prev) => [...prev, { id, type, message, duration }]);
       if (duration > 0) {
         setTimeout(() => {

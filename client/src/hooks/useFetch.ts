@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -34,6 +34,9 @@ export function useFetch<T = unknown, B = unknown>(
   });
 
   const abortRef = useRef<AbortController | null>(null);
+
+  const serializedBody = useMemo(() => JSON.stringify(body), [body]);
+  const serializedHeaders = useMemo(() => JSON.stringify(extraHeaders), [extraHeaders]);
 
   const refetch = useCallback(
     async (overrideBody?: B) => {
@@ -88,7 +91,7 @@ export function useFetch<T = unknown, B = unknown>(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, method, JSON.stringify(body), JSON.stringify(extraHeaders)],
+    [path, method, serializedBody, serializedHeaders],
   );
 
   return { ...state, refetch };
