@@ -1,0 +1,9 @@
+export const SERVER_PORT = parseInt(process.env.PORT || '5000', 10);
+export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/financial-platform';
+export const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret_change_in_production';
+export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+export const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY || '';
+export const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || '';
+export const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10);
+export const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '100', 10);
