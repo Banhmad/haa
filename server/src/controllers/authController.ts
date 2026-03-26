@@ -5,7 +5,7 @@ import { JWT_SECRET, JWT_EXPIRES_IN } from '../config/constants';
 import { createError } from '../middleware/errorHandler';
 
 const signToken = (id: string, email: string, role: string): string => {
-  return jwt.sign({ id, email, role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign({ id, email, role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN as string & jwt.SignOptions['expiresIn'] });
 };
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
