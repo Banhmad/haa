@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Restrict default permissions for all jobs; individual jobs can escalate
+# only what they need (e.g. upload-artifact needs no extra permissions).
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '18'
 
