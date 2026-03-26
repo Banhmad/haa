@@ -1,70 +1,77 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import { JWT_SECRET, JWT_EXPIRES_IN } from '../config/constants';
+import * as authService from '../services/authService';
 import { createError } from '../middleware/errorHandler';
-
-const signToken = (id: string, email: string, role: string): string => {
-  return jwt.sign({ id, email, role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN as string & jwt.SignOptions['expiresIn'] });
-};
+import { AuthRequest } from '../middleware/auth.middleware';
+import User from '../models/User';
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return next(createError('Please provide username, email and password', 400));
-    }
-
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
-      return next(createError('User with this email or username already exists', 409));
-    }
-
-    const user = await User.create({ username, email, password });
-    const token = signToken(user.id, user.email, user.role);
-
+    const result = await authService.register({ username, email, password });
     res.status(201).json({
       success: true,
-      data: { token, user: { id: user.id, username: user.username, email: user.email, role: user.role } },
+      data: { token: result.accessToken, refreshToken: result.refreshToken, user: result.user },
     });
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 };
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return next(createError('Please provide email and password', 400));
-    }
-
-    const user = await User.findOne({ email }).select('+password');
-    if (!user || !(await user.comparePassword(password))) {
-      return next(createError('Invalid email or password', 401));
-    }
-
-    const token = signToken(user.id, user.email, user.role);
-
+    const result = await authService.login(email, password);
     res.json({
       success: true,
-      data: { token, user: { id: user.id, username: user.username, email: user.email, role: user.role } },
+      data: { token: result.accessToken, refreshToken: result.refreshToken, user: result.user },
     });
-  } catch (error) {
-    next(error);
-  }
+  } catch (error) { next(error); }
 };
 
-export const getProfile = async (req: Request & { user?: { id: string } }, res: Response, next: NextFunction): Promise<void> => {
+export const logout = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    res.clearCookie('refreshToken');
+    res.json({ success: true, message: 'Logged out successfully' });
+  } catch (error) { next(error); }
+};
+
+export const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { refreshToken: token } = req.body;
+    if (!token) return next(createError('Refresh token is required', 400));
+    const result = await authService.refreshToken(token);
+    res.json({ success: true, data: result });
+  } catch (error) { next(error); }
+};
+
+export const forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { email } = req.body;
+    if (!email) return next(createError('Email is required', 400));
+    await authService.forgotPassword(email);
+    res.json({ success: true, message: 'If an account exists with that email, a reset link has been sent' });
+  } catch (error) { next(error); }
+};
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { token, newPassword } = req.body;
+    await authService.resetPassword(token, newPassword);
+    res.json({ success: true, message: 'Password reset successfully' });
+  } catch (error) { next(error); }
+};
+
+export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { token } = req.query;
+    if (!token || typeof token !== 'string') return next(createError('Verification token is required', 400));
+    await authService.verifyEmail(token);
+    res.json({ success: true, message: 'Email verified successfully' });
+  } catch (error) { next(error); }
+};
+
+export const getProfile = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = await User.findById(req.user?.id);
-    if (!user) {
-      return next(createError('User not found', 404));
-    }
-    res.json({ success: true, data: { id: user.id, username: user.username, email: user.email, role: user.role } });
-  } catch (error) {
-    next(error);
-  }
+    if (!user) return next(createError('User not found', 404));
+    res.json({ success: true, data: { id: user.id, username: user.username, email: user.email, role: user.role, isEmailVerified: user.isEmailVerified, avatar: user.avatar, bio: user.bio } });
+  } catch (error) { next(error); }
 };

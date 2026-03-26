@@ -13,6 +13,14 @@ export const createError = (message: string, statusCode: number): AppError => {
   return error;
 };
 
+export const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+export const notFoundHandler = (req: Request, _res: Response, next: NextFunction): void => {
+  next(createError(`Route ${req.originalUrl} not found`, 404));
+};
+
 export const errorHandler = (
   err: AppError,
   _req: Request,

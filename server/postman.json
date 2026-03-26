@@ -1,0 +1,201 @@
+{
+  "info": {
+    "name": "HAA Financial Platform API",
+    "description": "API collection for the HAA Financial Analysis Educational Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api", "type": "string" },
+    { "key": "authToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": { "method": "GET", "url": "{{baseUrl}}/health" }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Password1\"\n}" }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{ "listen": "test", "script": { "exec": ["const data = pm.response.json(); if(data.data && data.data.token){ pm.collectionVariables.set('authToken', data.data.token); pm.collectionVariables.set('refreshToken', data.data.refreshToken || ''); }"] } }],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Password1\"\n}" }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }]
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }]
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh-token",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/forgot-password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"test@example.com\"\n}" }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/reset-password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"YOUR_RESET_TOKEN\",\n  \"newPassword\": \"NewPassword1\"\n}" }
+          }
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/verify-email?token=YOUR_VERIFICATION_TOKEN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }]
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/profile",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"newusername\",\n  \"bio\": \"My updated bio\"\n}" }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/change-password",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Password1\",\n  \"newPassword\": \"NewPassword1\"\n}" }
+          }
+        },
+        {
+          "name": "Upload Avatar",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/user/avatar",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"avatarUrl\": \"https://example.com/avatar.jpg\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/user/account",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Charts",
+      "item": [
+        {
+          "name": "Get Quote",
+          "request": { "method": "GET", "url": "{{baseUrl}}/chart/quote/AAPL" }
+        },
+        {
+          "name": "Get History",
+          "request": { "method": "GET", "url": "{{baseUrl}}/chart/history/AAPL?interval=1d&limit=100" }
+        },
+        {
+          "name": "Search Symbol",
+          "request": { "method": "GET", "url": "{{baseUrl}}/chart/search?q=AAPL" }
+        },
+        {
+          "name": "Get Crypto Price",
+          "request": { "method": "GET", "url": "{{baseUrl}}/chart/crypto/bitcoin" }
+        },
+        {
+          "name": "Save Chart",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/chart/save",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"symbol\": \"AAPL\",\n  \"interval\": \"1d\",\n  \"chartType\": \"candlestick\",\n  \"title\": \"My AAPL Chart\",\n  \"indicators\": []\n}" }
+          }
+        },
+        {
+          "name": "Get My Charts",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/chart/my-charts",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analysis",
+      "item": [
+        {
+          "name": "Technical Analysis",
+          "request": { "method": "GET", "url": "{{baseUrl}}/analysis/technical/AAPL?interval=1d" }
+        },
+        {
+          "name": "Fundamental Analysis",
+          "request": { "method": "GET", "url": "{{baseUrl}}/analysis/fundamental/AAPL" }
+        },
+        {
+          "name": "Get Opportunities",
+          "request": { "method": "GET", "url": "{{baseUrl}}/analysis/opportunities?type=BREAKOUT" }
+        }
+      ]
+    }
+  ]
+}
