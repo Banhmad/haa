@@ -1,0 +1,163 @@
+.opportunities-finder {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.of-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.of-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.of-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+}
+
+.opportunities-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.opportunity-card {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  border-right: 4px solid transparent;
+}
+
+.opportunity-card.direction-long {
+  border-right-color: var(--success-color);
+}
+
+.opportunity-card.direction-short {
+  border-right-color: var(--danger-color);
+}
+
+.opp-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.opp-symbol {
+  font-size: 16px;
+  font-weight: 700;
+  direction: ltr;
+}
+
+.opp-direction {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.opp-direction.long {
+  background-color: rgba(72, 187, 120, 0.15);
+  color: var(--success-color);
+}
+
+.opp-direction.short {
+  background-color: rgba(252, 129, 129, 0.15);
+  color: var(--danger-color);
+}
+
+.opp-type {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background-color: var(--accent-color);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.opp-prices {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.opp-price-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.price-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: 14px;
+  font-weight: 600;
+  direction: ltr;
+}
+
+.price-value.target {
+  color: var(--success-color);
+}
+
+.price-value.stop {
+  color: var(--danger-color);
+}
+
+.opp-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.opp-description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.of-loading,
+.of-placeholder {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.of-error {
+  color: var(--danger-color);
+  font-size: 14px;
+  padding: 10px;
+}

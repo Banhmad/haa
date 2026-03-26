@@ -1,0 +1,106 @@
+.fundamental-analysis {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.fa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.fa-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.fa-search-form {
+  display: flex;
+  gap: 8px;
+}
+
+.fa-input {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 120px;
+  direction: ltr;
+}
+
+.company-info {
+  margin-bottom: 20px;
+}
+
+.company-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.company-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background-color: var(--accent-color);
+  color: var(--text-primary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.metric-card {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  direction: ltr;
+}
+
+.metric-note {
+  font-size: 11px;
+  color: var(--warning-color);
+  margin-top: 4px;
+}
+
+.fa-loading,
+.fa-placeholder {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.fa-error {
+  color: var(--danger-color);
+  font-size: 14px;
+  padding: 10px;
+}

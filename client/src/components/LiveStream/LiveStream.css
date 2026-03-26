@@ -1,0 +1,111 @@
+.live-stream {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.ls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ls-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ls-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.live-badge {
+  background-color: rgba(233, 69, 96, 0.15);
+  color: var(--highlight-color);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.ls-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.last-update {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stream-btn.stop {
+  background-color: var(--danger-color);
+}
+
+.quotes-table-wrapper {
+  overflow-x: auto;
+}
+
+.quotes-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.quotes-table th {
+  background-color: var(--secondary-color);
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding: 10px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.quotes-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(45, 55, 72, 0.5);
+  white-space: nowrap;
+}
+
+.quote-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.symbol-cell {
+  font-weight: 700;
+  direction: ltr;
+  text-align: left;
+}
+
+.price-cell,
+.change-cell,
+.change-pct-cell,
+.volume-cell {
+  direction: ltr;
+  text-align: right;
+}
+
+.positive { color: var(--success-color); }
+.negative { color: var(--danger-color); }
+.neutral { color: var(--text-secondary); }
+
+.ls-placeholder {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
