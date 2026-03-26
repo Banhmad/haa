@@ -6,6 +6,12 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: 'student' | 'instructor' | 'admin';
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
+  emailVerificationToken?: string;
+  isEmailVerified: boolean;
+  avatar?: string;
+  bio?: string;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -40,6 +46,12 @@ const UserSchema = new Schema<IUser>(
       enum: ['student', 'instructor', 'admin'],
       default: 'student',
     },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
+    emailVerificationToken: { type: String },
+    isEmailVerified: { type: Boolean, default: false },
+    avatar: { type: String },
+    bio: { type: String, maxlength: 500 },
   },
   { timestamps: true }
 );

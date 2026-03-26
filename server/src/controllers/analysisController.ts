@@ -1,14 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { createError } from '../middleware/errorHandler';
 
+const isValidSymbol = (symbol: string): boolean => {
+  return /^[A-Z0-9]{1,10}$/.test(symbol.toUpperCase());
+};
+
 export const getTechnicalAnalysis = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { symbol } = req.params;
     const { interval = '1d' } = req.query;
 
     if (!symbol) return next(createError('Symbol is required', 400));
+    if (!isValidSymbol(symbol)) return next(createError('Invalid symbol format', 400));
 
-    // Mock technical analysis - replace with actual computation
     const signals = ['BUY', 'SELL', 'HOLD', 'NEUTRAL'] as const;
     const signal = signals[Math.floor(Math.random() * signals.length)];
 
@@ -25,7 +29,7 @@ export const getTechnicalAnalysis = async (req: Request, res: Response, next: Ne
         { name: 'Bollinger Bands', value: 'Middle', signal: 'NEUTRAL' },
         { name: 'Stochastic', value: parseFloat((20 + Math.random() * 60).toFixed(1)), signal: 'NEUTRAL' },
       ],
-      summary: `التحليل الفني لـ ${symbol.toUpperCase()} على الإطار الزمني ${interval} يشير إلى إشارة ${signal} بناءً على مجموع المؤشرات الفنية.`,
+      summary: `Technical analysis for ${symbol.toUpperCase()} on ${interval} timeframe indicates a ${signal} signal based on aggregate indicators.`,
     };
 
     res.json({ success: true, data: result });
@@ -38,8 +42,8 @@ export const getFundamentalAnalysis = async (req: Request, res: Response, next: 
   try {
     const { symbol } = req.params;
     if (!symbol) return next(createError('Symbol is required', 400));
+    if (!isValidSymbol(symbol)) return next(createError('Invalid symbol format', 400));
 
-    // Mock fundamental data - replace with actual data source
     const result = {
       symbol: symbol.toUpperCase(),
       companyName: `${symbol.toUpperCase()} Corporation`,
@@ -89,12 +93,15 @@ export const getOpportunities = async (req: Request, res: Response, next: NextFu
         stopLoss: stop,
         riskRewardRatio: parseFloat((Math.abs(target - entryPrice) / Math.abs(stop - entryPrice)).toFixed(1)),
         confidence: parseFloat((60 + Math.random() * 40).toFixed(1)),
-        description: `فرصة ${direction === 'LONG' ? 'شراء' : 'بيع'} في ${symbol} بناءً على نمط ${opportunityTypes[i % opportunityTypes.length]}`,
+        description: `${direction === 'LONG' ? 'Buy' : 'Sell'} opportunity in ${symbol} based on ${opportunityTypes[i % opportunityTypes.length]} pattern`,
         createdAt: new Date().toISOString(),
       };
     });
 
     if (type) {
+      if (!opportunityTypes.includes(type as typeof opportunityTypes[number])) {
+        return next(createError('Invalid opportunity type', 400));
+      }
       opportunities = opportunities.filter((o) => o.type === type);
     }
 
