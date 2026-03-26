@@ -17,8 +17,8 @@ export const validateUsername = (username: string): string | null => {
   if (!username || !username.trim()) return 'اسم المستخدم مطلوب';
   if (username.trim().length < 3) return 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل';
   if (username.trim().length > 30) return 'اسم المستخدم يجب أن لا يتجاوز 30 حرفاً';
-  if (!/^[a-zA-Z0-9_\u0600-\u06FF]+$/.test(username.trim()))
-    return 'اسم المستخدم يحتوي على أحرف غير مسموح بها';
+  if (!/^[a-zA-Z0-9_]+$/.test(username.trim()))
+    return 'اسم المستخدم يجب أن يحتوي على أحرف إنجليزية وأرقام وشرطة سفلية فقط';
   return null;
 };
 

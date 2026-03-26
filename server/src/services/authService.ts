@@ -6,6 +6,9 @@ import { JWT_REFRESH_SECRET } from '../config/constants';
 import { createError, AppError } from '../middleware/errorHandler';
 import * as emailService from './emailService';
 
+/** Duration of a password reset token: 1 hour in milliseconds */
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
 export interface RegisterData {
   username: string;
   email: string;
@@ -64,7 +67,7 @@ export const forgotPassword = async (email: string) => {
   if (!user) return;
   const resetToken = crypto.randomBytes(32).toString('hex');
   user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  user.resetPasswordExpires = new Date(Date.now() + ONE_HOUR_MS); // 1 hour
   await user.save({ validateBeforeSave: false });
   await emailService.sendPasswordResetEmail(email, resetToken).catch((err) => logger.warn(`Failed to send password reset email to ${email}: ${err.message}`));
 };
